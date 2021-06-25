@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="sale_order_view_form_rma" model="ir.ui.view">
+		<field name="name">sale.order.form</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='payment_term_id']" position="after">
+				<field name="rma_order_id" invisible="1" domain="[('partner_id', '=', partner_id)]" />
+			</xpath>
+			<xpath expr="//button[@name='action_cancel']" position="after">
+				<button name="action_create_rma" class="oe_highlight" states="sale,done" type="object" string="Create RMA"/>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="sale_order_view_form_rma_manager" model="ir.ui.view">
+		<field name="name">sale.order.form</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="novobi_rma.sale_order_view_form_rma" />
+		<field name="groups_id" eval="[(6, 0, [ref('novobi_rma.group_rma_manager')])]"/>
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='rma_order_id']" position="attributes">
+				<attribute name="readonly">False</attribute>
+			</xpath>
+			<xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button type="object" name="action_view_rma" attrs="{'invisible': [('rma_count','=',0)]}" class="oe_stat_button"
+                icon="fa-truck">
+					<field name="rma_count" widget="statinfo"  string="RMA Order(s)"/>
+                </button>
+			</xpath>
+		</field>
+	</record>
+</odoo>

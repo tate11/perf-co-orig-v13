@@ -1,0 +1,370 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="rma_order_view_tree" model="ir.ui.view">
+        <field name="name">rma.order.view.tree</field>
+        <field name="model">rma.order</field>
+        <field name="arch" type="xml">
+            <tree string="RMA Orders" delete="0">
+                <field name="name"/>
+                <field name="number"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="date"/>
+                <field name="state"/>
+                <field name="sale_id" optional="show"/>
+                <field name="purchase_id" optional="show"/>
+                <field name="date_action_next"/>
+                <field name="action_next" optional="hide"/>
+                <field name="date_deadline" invisible="1"/>
+                <field name="date_closed" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="rma_order_view_kanban" model="ir.ui.view">
+        <field name="name">rma.order.view.kanban</field>
+        <field name="model">rma.order</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" default_group_by="state">
+                <field name="number"/>
+                <field name="partner_id"/>
+                <field name="name"/>
+                <field name="state"/>
+                <field name="state" groups="novobi_rma.group_rma_manager"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <div>
+                                <strong>
+                                    <span>
+                                        <t t-esc="record.name.value"/>
+                                    </span>
+                                </strong>
+                                <span class="pull-right text-right">
+                                    <field name="state" widget="kanban_label_selection"
+                                           options="{'classes': {'draft': 'default', 'cancel': 'danger', 'return': 'warning',
+														'repair': 'warning', 'payment':'warning', 'delivery':'warning', 'done': 'success'}}"/>
+                                </span>
+                            </div>
+                            <div>
+                                <strong>
+                                    <span>
+                                        <t t-esc="record.number.value"/>
+                                    </span>
+                                </strong>
+                            </div>
+                            <div>
+                                <span>
+                                    <t t-esc="record.partner_id.value"/>
+                                </span>
+                                <span class="pull-right text-right">
+                                    <field name="priority" widget="priority"/>
+                                </span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="rma_order_view_form_quick_create" model="ir.ui.view">
+        <field name="name">RMA Orders Form Quick Create</field>
+        <field name="model">rma.order</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <form string="RMA">
+                <sheet string="RMA Orders">
+                    <group colspan="4" col="4" groups="base.group_user">
+                        <field name="name"/>
+                        <field name="type"/>
+                        <field name="date"/>
+                        <field name="user_id"
+                               context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'sales_team.group_sale_salesman_all_leads']}"
+                               attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="priority" widget="priority"/>
+                        <field name="date_deadline"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="rma_order_type"/>
+                        <field name="team_id" attrs="{'invisible':[('sale_id', '=', False)]}"/>
+                        <field name="user_id" attrs="{'invisible':[('purchase_id', '=', False)]}"/>
+                        <field name="partner_id" string="Partner" required="1"/>
+                        <field name="auto_refund" groups="novobi_rma.group_rma_manager" attrs="{'invisible':[('type','=','exchange')]}"/>
+                        <field name="sale_id"
+                               domain="[('partner_id','child_of',partner_id),('state','in',('sale','done'))]"
+                               options="{'no_create': True}" attrs="{'invisible':[('sale_id', '=', False)]}"/>
+                        <field name="purchase_id"
+                               domain="[('partner_id','child_of',partner_id),('state','in',('purchase','done'))]"
+                               options="{'no_create': True}" attrs="{'invisible':[('purchase_id', '=', False)]}"/>
+                        <field name="state" invisible="1"/>
+                    </group>
+                    <group colspan="4" col="4" groups="base.group_user">
+                        <field name="partner_phone"/>
+                        <field name="email_from" widget="email"/>
+                        <field name="date_action_next"/>
+                        <field name="action_next"/>
+                        <field name="reason_code" widget="many2many_tags"/>
+                    </group>
+                    <separator colspan="4" string="Description"/>
+                    <field name="description" colspan="4" nolabel="1"/>
+                </sheet>
+                <footer>
+                    <button name="pass_create_rma" class="oe_highlight" type="object" string="Create RMA"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="rma_order_view_form" model="ir.ui.view">
+        <field name="name">RMA Orders Form</field>
+        <field name="model">rma.order</field>
+        <field name="arch" type="xml">
+            <form string="RMA Order" delete="0">
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet string="RMA Orders">
+                    <div class="oe_button_box" name="button_box">
+
+                        <button type="object" name="action_view_invoice" class="oe_stat_button"
+                                icon="fa-pencil-square-o" attrs="{'invisible': ['|',('rma_order_type','!=','customer'),('invoice_count','=',0)]}"
+                                groups="novobi_rma.group_rma_manager"
+                                context="{'default_partner_id': partner_id, 'default_rma_order_id': id, 'default_type':'out_invoice'}">
+                            <field name="invoice_count" widget="statinfo" string="Invoice(s)"/>
+                        </button>
+
+                        <button type="object" name="action_view_refund" class="oe_stat_button"
+                                icon="fa-pencil-square-o" attrs="{'invisible': ['|',('rma_order_type','!=','customer'),('type','!=','return')]}"
+                                groups="novobi_rma.group_rma_manager"
+                                context="{'default_partner_id': partner_id, 'default_rma_order_id': id, 'default_type':'out_refund'}">
+                            <field name="refund_count" widget="statinfo" string="Refund(s)"/>
+                        </button>
+
+                        <button type="object" name="action_view_invoice" class="oe_stat_button"
+                                icon="fa-pencil-square-o" attrs="{'invisible': ['|',('rma_order_type','!=','supplier'),('vendor_bill_count','=',0)]}"
+                                groups="novobi_rma.group_rma_manager"
+                                context="{'default_partner_id': partner_id, 'default_rma_order_id': id, 'default_type':'in_invoice'}">
+                            <field name="vendor_bill_count" widget="statinfo" string="Vendor Bill(s)"/>
+                        </button>
+
+                        <button type="object" name="action_view_refund" class="oe_stat_button"
+                                icon="fa-pencil-square-o" attrs="{'invisible': ['|',('rma_order_type','!=','supplier'),('type','!=','return')]}"
+                                groups="novobi_rma.group_rma_manager"
+                                context="{'default_partner_id': partner_id, 'default_rma_order_id': id, 'default_type':'in_refund'}">
+                            <field name="vendor_refund_count" widget="statinfo" string="Vendor Refund(s)"/>
+                        </button>
+
+                        <button type="object" name="action_view_picking" class="oe_stat_button" attrs="{'invisible': ['|',('type','!=','exchange'),('rma_order_type','!=','supplier')]}"
+                                icon="fa-usd" groups="novobi_rma.group_rma_manager,novobi_rma.group_rma_user"
+                                context="{'default_partner_id': partner_id, 'default_rma_order_id': id, 'picking_type_code':'incoming'}">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text" >
+                                    <field name="return_count" widget="statinfo" nolabel="1"/>
+                                </span>
+                                <span class="o_stat_text" >
+                                    <label for="return_count" string = "Receipt(s)" attrs="{'invisible': ['|',('type','!=','exchange'),('rma_order_type','!=','supplier')]}"/>
+                                </span>
+                            </div>
+                        </button>
+
+                        <button type="object" name="action_view_picking" class="oe_stat_button" attrs="{'invisible': [('rma_order_type','!=','customer')]}"
+                                icon="fa-usd" groups="novobi_rma.group_rma_manager,novobi_rma.group_rma_user"
+                                context="{'default_partner_id': partner_id, 'default_rma_order_id': id, 'picking_type_code':'incoming'}">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text" >
+                                    <field name="return_count" widget="statinfo" nolabel="1"/>
+                                </span>
+                                <span class="o_stat_text" >
+                                    <label for="return_count" string = "Return(s)" attrs="{'invisible': [('rma_order_type','!=','customer')]}"/>
+                                </span>
+                            </div>
+                        </button>
+
+                        <button type="object" name="action_view_picking" class="oe_stat_button" attrs="{'invisible': ['&amp;',('rma_order_type','=','customer'),('type','!=','exchange')]}"
+                                icon="fa-truck" groups="novobi_rma.group_rma_manager,novobi_rma.group_rma_user"
+                                context="{'default_partner_id': partner_id, 'default_rma_order_id': id,'picking_type_code':'outgoing'}">
+                            <field name="delivery_count" widget="statinfo" string="Delivery Order(s)"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="number" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group groups="base.group_user">
+                            <field name="name" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="type" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="rma_order_type" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="partner_id" string="Partner"
+                                   attrs="{'readonly':[('state','!=','draft')],'invisible':[('rma_order_type','=',False)]}"
+                                   required="1"/>
+                            <field name="sale_id"
+                                   domain="[('partner_id','child_of',partner_id),('state','in',('sale','done'))]"
+                                   options="{'no_create': True}" style="width:40%;"
+                                   attrs="{'readonly':['|',('partner_id','=',False),('state','!=','draft')],'invisible':[('rma_order_type','=','supplier')]}"/>
+                            <field name="purchase_id"
+                                   domain="[('partner_id','child_of',partner_id),('state','in',('purchase','done'))]"
+                                   options="{'no_create': True}" style="width:40%;"
+                                   attrs="{'readonly':['|',('partner_id','=',False),('state','!=','draft')],'invisible':[('rma_order_type','=','customer')]}"/>
+                            <field name="reason_code" widget="many2many_tags"
+                                           attrs="{'readonly':[('state','in',('done','cancel'))]}"/>
+                            <field name="priority" widget="priority"
+                                   attrs="{'readonly':[('state','in',('done','cancel'))]}"/>
+
+                        </group>
+                        <group attrs="{'invisible':['|',('partner_id', '=', False),('rma_order_type','=',False)]}">
+                            <field name="date" attrs="{'readonly':[('state','!=','draft')]}"/>
+
+                            <field name="date_deadline" attrs="{'readonly':[('state','in',('done','cancel'))]}"/>
+                            <field name="company_id" attrs="{'readonly':[('state','!=','draft')]}" groups="base.group_multi_company"/>
+
+                            <field name="team_id" attrs="{'readonly':[('state','!=','draft')],'invisible':[('sale_id', '=', False)]}"/>
+                            <field name="user_id" attrs="{'readonly':[('state','!=','draft')],'invisible':[('purchase_id', '=', False)]}"/>
+
+                            <field name="auto_refund" groups="novobi_rma.group_rma_manager" attrs="{'invisible':[('type','=','exchange')]}"/>
+                        </group>
+                    </group>
+                    <group colspan="4" col="4">
+                        <notebook>
+                            <page string="Information">
+                                <group colspan="4" col="4" groups="base.group_user">
+                                    <field name="date_action_next"
+                                           attrs="{'readonly':[('state','in',('done','cancel'))]}"/>
+                                    <field name="action_next" attrs="{'readonly':[('state','in',('done','cancel'))]}"/>
+                                    <field name="write_date"/>
+                                    <field name="date_closed"/>
+                                </group>
+                                <separator colspan="4" string="Description"
+                                           groups="base.group_user" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="description" colspan="4" nolabel="1"
+                                       attrs="{'readonly':[('state','in',('done','cancel'))]}"/>
+                                <group
+                                        attrs="{'invisible':[('invoice_id','=',False),('rma_order_line_ids','=',[])]}">
+                                    <separator string="Product Selection" colspan="4"/>
+                                    <span class="oe_inline">Please select the invoice and then the product(s) that are
+                                        involved in this RMA. Add other products that will be used in this RMA and
+                                        delete any that are not involved.
+                                    </span>
+
+                                    <group colspan="2" col="2">
+
+                                        <field name="invoice_id" readonly="1"
+                                               attrs="{'invisible':[('invoice_id','=',False)]}"
+                                               options="{'no_create': True}"/>
+                                    </group>
+                                    <group name="Product Return" colspan="4">
+                                        <field name="rma_order_line_ids" readonly="1"
+                                               attrs="{'invisible':[('rma_order_line_ids','=',[])]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Miscellaneous" groups="base.group_user">
+
+                                <group>
+                                    <field name="partner_phone"
+                                           attrs="{'readonly':[('state','in',('done','cancel'))]}"/>
+                                    <field name="email_from" widget="email"
+                                           attrs="{'readonly':[('state','in',('done','cancel'))]}"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"
+                           groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="rma_order_view_calendar" model="ir.ui.view">
+        <field name="name">rma.order.view.calendar</field>
+        <field name="model">rma.order</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <calendar string="RMA Order" date_start="date_action_next"
+                      color="user_id">
+                <field name="number"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="rma_order_search_view" model="ir.ui.view">
+        <field name="name">RMA Orders Search</field>
+        <field name="model">rma.order</field>
+        <field name="arch" type="xml">
+            <search string="Search RMAs">
+                <field name="number" string="RMAs"/>
+                <field name="name" string="RMA Subject"/>
+                <field name="sale_id" string="Orders"/>
+                <separator/>
+                <filter string="Unassigned RMAs" name="unassigned" domain="[('user_id','=', False)]"
+                        help="Unassigned RMAs"/>
+                <filter string="SO RMAs" name="group_by_sale" domain="[('sale_id','!=',False)]"/>
+                <filter string="PO RMAs" name="group_by_purchase" domain="[('purchase_id','!=',False)]"/>
+
+                <field name="partner_id" filter_domain="[('partner_id','child_of',self)]"/>
+                <field name="user_id"/>
+                <field name="state"/>
+                <group expand="0" string="Group By">
+                    <filter string="Partner" name="group_by_partner" domain="[]" help="Partner"
+                            context="{'group_by':'partner_id'}"/>
+                    <filter string="Status" name="group_by_stage" domain="[]" context="{'group_by':'state'}"/>
+                    <filter string="Type" name="group_by_type" domain="[]" context="{'group_by':'type'}"/>
+                    <filter string="Responsible" name="group_by_responsible" domain="[]" help="Responsible User"
+                            context="{'group_by':'user_id'}"/>
+                    <filter string="RMA Month" name="group_by_month" domain="[]" help="RMA Date by Month"
+                            context="{'group_by':'date'}"/>
+                    <filter string="Deadline" name="group_by_deadline" domain="[]"
+                            context="{'group_by':'date_deadline'}"/>
+                    <filter string="Closure" name="group_by_date_closed" domain="[]" help="Date Closed"
+                            context="{'group_by':'date_closed'}" groups="base.group_no_one" invisible="1"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="rma_order_line_view_tree" model="ir.ui.view">
+        <field name="name">rma.order.line.view.tree</field>
+        <field name="model">rma.order.line</field>
+        <field name="arch" type="xml">
+            <tree editable="top" string="Returned lines">
+                <field name="state" invisible="1"/>
+                <field name="product_id"/>
+                <field name="name"/>
+                <field name="on_invoice"/>
+                <field name="prodlot_id"/>
+                <field name="product_returned_quantity"/>
+                <field name="product_uom_id"/>
+                <field name="rma_order_origin" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="rma_order_action_view" model="ir.actions.act_window">
+        <field name="name">RMA Orders</field>
+        <field name="res_model">rma.order</field>
+        <field name="view_mode">kanban,tree,calendar,form</field>
+        <field name="view_ids" eval="[(5,0,0),
+               (0, 0, {'view_mode': 'kanban', 'view_id': ref('novobi_rma.rma_order_view_kanban')}),
+               (0, 0, {'view_mode': 'tree', 'view_id': ref('novobi_rma.rma_order_view_tree')}),
+               (0, 0, {'view_mode': 'calendar', 'view_id': ref('novobi_rma.rma_order_view_calendar')}),
+               (0, 0, {'view_mode': 'form', 'view_id': ref('novobi_rma.rma_order_view_form')})]"/>
+        <field name="context">{"search_default_user_id": uid}</field>
+        <field name="search_view_id" ref="novobi_rma.rma_order_search_view"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Record and track your customers' RMAs. RMAs may be linked to a sales order or a lot.You can send emails
+                with attachments and keep the full history for a claim (emails sent, intervention type and so on). RMAs
+                may automatically be linked to an email address using the mail gateway module.
+            </p>
+        </field>
+    </record>
+
+</odoo>

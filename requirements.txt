@@ -1,0 +1,4 @@
+holidays
+numpy==1.17.0
+ach==0.2
+odoo_import_export_client==3.0.0

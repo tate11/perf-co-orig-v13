@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record model="ir.ui.view" id="rma_order_reason_view_form">
+        <field name="name">rma.order.reason.view.form</field>
+        <field name="model">rma.order.reason</field>
+        <field name="arch" type="xml">
+            <form string="RMA">
+                <sheet string="RMAs">
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="rma_order_reason_view_tree">
+        <field name="name">rma.order.reason.view.tree</field>
+        <field name="model">rma.order.reason</field>
+        <field name="arch" type="xml">
+            <tree string="RMA Reason Code">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="rma_order_reason_action_view" model="ir.actions.act_window">
+        <field name="name">RMA Order Reason Code</field>
+        <field name="res_model">rma.order.reason</field>
+        <field name="view_id" ref="rma_order_reason_view_tree"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to setup a new reason code for the RMAs.
+            </p>
+        </field>
+    </record>
+
+</odoo>
