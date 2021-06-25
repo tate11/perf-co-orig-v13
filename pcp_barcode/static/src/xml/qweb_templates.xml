@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-inherit="stock_barcode.stock_barcode_lines_template"  t-inherit-mode="extension">
+        <xpath expr="//t[@t-if='lines']//div[@t-if=&quot;model == 'stock.picking'&quot;]//i[hasclass('fa-pencil')]" position="attributes">
+            <attribute name="class">fa fa-2x fa-pencil</attribute>
+        </xpath>
+        <xpath expr="//t[@t-if='lines']//div[@t-if=&quot;model == 'stock.picking'&quot;]//div[hasclass('o_barcode_line_actions')]" position="before">
+            <t t-if="line.product_id.tracking !== 'none' &amp;&amp; !line.lot_name &amp;&amp; !line.lot_id ">
+                <div t-if="state != 'done' and state != 'cancel' and line.use_create_lots" class="o_barcode_line_actions d-flex align-items-center pl-4">
+                    <a class="o_create_lot_name text-muted" href="#" title="Create Lot Name"><i class="fa fa-2x fa-plus"/></a>
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//t[@t-if='lines']//div[@t-if=&quot;model == 'stock.picking'&quot;]//span[@t-if='groups.group_uom']" position="after">
+            <span class="lp_tags">
+                <t t-if="line['scanned_license_plates']">
+                    <t t-foreach="line['scanned_license_plates']" t-as="lp_line">
+                        <span class="badge badge-pill" style="color:#777777;margin-left:2px;font-size:12px;"><t t-esc="lp_line[1]"/></span>
+                    </t>
+                </t>
+            </span>
+        </xpath>
+    </t>
+</templates>

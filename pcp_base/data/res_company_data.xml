@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="1">
+        <!--Create World Food Products company-->
+        <record id="wfp_company_partner" model="res.partner">
+            <field name="name">World Food Products</field>
+            <field name="company_id" eval="None"/>
+            <field name="is_company" eval="True"/>
+            <field name="street">668 Industrial Park Dr # 4058</field>
+            <field name="street2">1192 Vanderbilt Circle</field>
+            <field name="city">Manteca</field>
+            <field name='country_id' ref='base.us'/>
+            <field name='state_id' ref='base.state_us_5'/>
+            <field name="zip">95337</field>
+            <field name="phone">209-924-2010</field>
+            <field name="email">sales@worldfoodproducts.com</field>
+            <field name="website">https://www.worldfoodproducts.com</field>
+            <field name="image_1920" type="base64" file="pcp_base/static/img/WFP_logo.png"/>
+        </record>
+
+        <record id="wfp_company" model="res.company">
+            <field name="name">World Food Products</field>
+            <field name="partner_id" ref="wfp_company_partner"/>
+            <field name="currency_id" ref="base.USD"/>
+            <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+            <field name="street">668 Industrial Park Dr # 4058</field>
+            <field name="street2">1192 Vanderbilt Circle</field>
+            <field name="city">Manteca</field>
+            <field name='country_id' ref='base.us'/>
+            <field name='state_id' ref='base.state_us_5'/>
+            <field name="zip">95337</field>
+            <field name="phone">209-924-2010</field>
+            <field name="email">sales@worldfoodproducts.com</field>
+            <field name="website">https://www.worldfoodproducts.com</field>
+            <field name="favicon" type="base64" file="pcp_base/static/img/WFP_logo.png"/>
+            <field name="logo" type="base64" file="pcp_base/static/img/WFP_logo.png"/>
+        </record>
+
+        <record id="wfp_company_partner" model="res.partner">
+            <field name="company_id" ref="wfp_company"/>
+        </record>
+
+        <!--Update the information for Performance Co-Packing company-->
+        <record id="base.main_partner" model="res.partner">
+            <field name="name">Performance Co-Packing</field>
+            <field name="street">668 Industrial Park Dr # 4058</field>
+            <field name="street2">1192 Vanderbilt Circle</field>
+            <field name="city">Manteca</field>
+            <field name='country_id' ref='base.us'/>
+            <field name='state_id' ref='base.state_us_5'/>
+            <field name="zip">95337</field>
+            <field name="phone">+1 209-249-7044</field>
+            <field name="email">sales@performancecopacking.com</field>
+            <field name="website"></field>
+            <field name="vat">38-3970416</field>
+            <field name="image_1920" type="base64" file="pcp_base/static/img/PCP_logo.png"/>
+        </record>
+
+        <record id="base.main_company" model="res.company">
+            <field name="name">Performance Co-Packing</field>
+            <field name="currency_id" ref="base.USD"/>
+            <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+            <field name="street">668 Industrial Park Dr # 4058</field>
+            <field name="street2">1192 Vanderbilt Circle</field>
+            <field name="city">Manteca</field>
+            <field name='country_id' ref='base.us'/>
+            <field name='state_id' ref='base.state_us_5'/>
+            <field name="zip">95337</field>
+            <field name="phone">+1 209-249-7044</field>
+            <field name="email">sales@performancecopacking.com</field>
+            <field name="website"></field>
+            <field name="vat">38-3970416</field>
+            <field name="favicon" type="base64" file="pcp_base/static/img/PCP_logo.png"/>
+            <field name="logo" type="base64" file="pcp_base/static/img/PCP_logo.png"/>
+        </record>
+
+    </data>
+</odoo>

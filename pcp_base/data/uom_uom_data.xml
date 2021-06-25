@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="0">
+        <record id="product_uom_case" model="uom.uom">
+            <field name="name">CASE</field>
+            <field name="category_id" ref="uom.product_uom_categ_unit"/>
+            <field name="factor">1</field>
+            <field name="factor_inv">1</field>
+            <field name="uom_type">bigger</field>
+        </record>
+        <record id="product_uom_each" model="uom.uom">
+            <field name="name">EACH</field>
+            <field name="category_id" ref="uom.product_uom_categ_unit"/>
+            <field name="factor">1</field>
+            <field name="factor_inv">1</field>
+            <field name="uom_type">bigger</field>
+        </record>
+        <record id="product_uom_imp" model="uom.uom">
+            <field name="name">IMP</field>
+            <field name="category_id" ref="uom.product_uom_categ_unit"/>
+            <field name="factor">1</field>
+            <field name="factor_inv">1</field>
+            <field name="uom_type">bigger</field>
+        </record>
+        <record id="product_uom_plt" model="uom.uom">
+            <field name="name">PLT</field>
+            <field name="category_id" ref="uom.product_uom_categ_unit"/>
+            <field name="factor">1</field>
+            <field name="factor_inv">1</field>
+            <field name="uom_type">bigger</field>
+        </record>
+        <record id="product_uom_ship" model="uom.uom">
+            <field name="name">SHIP</field>
+            <field name="category_id" ref="uom.product_uom_categ_unit"/>
+            <field name="factor">1</field>
+            <field name="factor_inv">1</field>
+            <field name="uom_type">bigger</field>
+        </record>
+        <record id="product_uom_roll" model="uom.uom">
+            <field name="name">ROLL</field>
+            <field name="category_id" ref="uom.product_uom_categ_unit"/>
+            <field name="factor">1</field>
+            <field name="factor_inv">1</field>
+            <field name="uom_type">bigger</field>
+        </record>
+        <record id="product_uom_shpr" model="uom.uom">
+            <field name="name">SHPR</field>
+            <field name="category_id" ref="uom.product_uom_categ_unit"/>
+            <field name="factor">1</field>
+            <field name="factor_inv">1</field>
+            <field name="uom_type">bigger</field>
+        </record>
+        <record id="product_uom_tray" model="uom.uom">
+            <field name="name">TRAY</field>
+            <field name="category_id" ref="uom.product_uom_categ_unit"/>
+            <field name="factor">1</field>
+            <field name="factor_inv">1</field>
+            <field name="uom_type">bigger</field>
+        </record>
+    </data>
+</odoo>
