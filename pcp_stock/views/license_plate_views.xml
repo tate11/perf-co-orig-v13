@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="license_plate_tree" model="ir.ui.view">
+        <field name="name">license.plate.tree</field>
+        <field name="model">license.plate</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="License Plate Numbers" create="0">
+                <field name="name"/>
+                <field name="type"/>
+                <field name="lot_id"/>
+                <field name="product_id"/>
+                <field name="reserved_qty" sum="Total Reserved Quantity"/>
+                <field name="product_qty" sum="Total Quantity"/>
+                <field name="product_uom_id" groups="uom.group_uom"/>
+                <field name="use_date"/>
+                <field name="removal_date"/>
+                <field name="life_date"/>
+                <field name="alert_date"/>
+                <field name="company_id" groups="base.group_multi_company" />
+            </tree>
+        </field>
+    </record>
+    <record id="license_plate_form" model="ir.ui.view">
+        <field name="name">license.plate.form</field>
+        <field name="model">license.plate</field>
+        <field name="arch" type="xml">
+            <form string="License Plate Numbers" create="0">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. LP/0001/20121"/>
+                        </h1>
+                    </div>
+                    <group name="main_group">
+                        <group>
+                            <field name="product_id"/>
+                            <field name="type"/>
+                            <field name="lot_id" readonly="1" force_save="1"/>
+                            <label for="product_qty" attrs="{'invisible': [('lot_id', '=', False)]}"/>
+                            <div class="o_row" attrs="{'invisible': [('lot_id', '=', False)]}">
+                                <field name="reserved_qty"/> / <field name="product_qty"/>
+                                <field name="product_uom_id" readonly="1" groups="uom.group_uom"/>
+                            </div>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook attrs="{'invisible': [('lot_id', '=', False)]}">
+                        <page string="Dates">
+                            <group>
+                                <group>
+                                    <field name="use_date"/>
+                                    <field name="removal_date"/>
+                                </group>
+                                <group>
+                                    <field name="life_date"/>
+                                    <field name="alert_date"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="note"/>
+                        </page>
+                        <page string="Used In Operations" name="license_plate_line">
+                            <field name="lp_line_ids" mode="tree" readonly="1">
+                                <tree>
+                                    <field name="product_id"/>
+                                    <field name="product_uom_id"/>
+                                    <field name="reserved_qty"/>
+                                    <field name="workorder_line_id"/>
+                                    <field name="move_line_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="search_license_plate_filter">
+        <field name="name">License Plate</field>
+        <field name="model">license.plate</field>
+        <field name="arch" type="xml">
+            <search string="License Plate Filter">
+                <field name="name" string="License Plate Number"/>
+                <field name="lot_id"/>
+                <field name="product_id"/>
+                <group expand="0" string="Group By">
+                    <filter name="lot_id" string="Lot/Serial Number" domain="[]" context="{'group_by': 'lot_id'}"/>
+                    <filter name="product_id" string="Product" domain="[]" context="{'group_by': 'product_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="license_plate_action">
+        <field name="name">License Plate Numbers</field>
+        <field name="res_model">license.plate</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="search_view_id" ref="search_license_plate_filter"/>
+        <field name="view_id" ref="license_plate_tree"/>
+    </record>
+    <menuitem action="license_plate_action" id="menu_action_license_form"
+        parent="stock.menu_stock_inventory_control" groups="stock.group_production_lot"
+        sequence="102"/>
+</odoo>

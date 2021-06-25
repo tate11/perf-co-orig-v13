@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_move_line_detailed_operation_tree" model="ir.ui.view">
+        <field name="name">pcp.stock.move.line.operations.tree</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+        <field name="arch" type="xml">
+            <field name="lot_id" position="after">
+                <field name="show_lp_buttons_generating" invisible="1"/>
+                <field name="show_lp_buttons_scanning" invisible="1"/>
+                <field name="picking_type_code" invisible="1"/>
+                <button name="generate_lp_number"
+                    type="object"
+                    string="Generate LP"
+                    class="btn btn-link"
+                    attrs="{'invisible': ['|', ('lot_id', '=', False), ('show_lp_buttons_generating', '=', False)]}"/>
+                <button name="view_lp_number"
+                    type="object"
+                    string="View all LP"
+                    class="btn btn-success"
+                    attrs="{'invisible': ['|', ('lot_id', '=', False), ('show_lp_buttons_generating', '=', False)]}"/>
+                <field name="number_of_lp"
+                    attrs="{'invisible': ['|', ('lot_id', '=', False), ('show_lp_buttons_generating', '=', False)]}"/>
+                <field name="license_plate_ids"
+                    string="Scanned LP Numbers"
+                    domain="[('lot_id', '=', lot_id)]"
+                    widget="many2many_tags"
+                    attrs="{'invisible': ['|', ('lot_id', '=', False), ('show_lp_buttons_scanning', '=', False)]}"/>
+            </field>
+        </field>
+    </record>
+</odoo>

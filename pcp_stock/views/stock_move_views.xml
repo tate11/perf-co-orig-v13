@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_move_raw_tree_inherit" model="ir.ui.view">
+        <field name="name">view.stock.move.raw.tree.inherit</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="mrp.view_stock_move_raw_tree"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+                <field name="material_status" attrs="{'column_invisible': [('parent.state', 'in', ('draft', 'done', 'cancel'))]}"/>
+            </field>
+        </field>
+    </record>
+</odoo>

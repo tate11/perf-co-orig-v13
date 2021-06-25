@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="generate_license_plate_view" model="ir.ui.view">
+        <field name="name">generate.license.plate.view</field>
+        <field name="model">generate.license.plate</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="lot_id" readonly="1"/>
+                        <field name="product_id" readonly="1"/>
+                        <field name="type"/>
+                        <label for="number_of_lp"/>
+                        <div class="o_row">
+                            <field name="number_of_lp"/> / <field name="product_qty"/>
+                            <field name="product_uom_id" readonly="1" groups="uom.group_uom"/>
+                        </div>
+                        <field name="qty_done" invisible="1"/>
+                        <field name="product_uom_id" groups="uom.group_uom"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="generate" string="Generate" type="object" class="btn btn-primary"/>
+                    <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="generate_license_plate_action" model="ir.actions.act_window">
+        <field name="name">Generate License Plate</field>
+        <field name="res_model">generate.license.plate</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

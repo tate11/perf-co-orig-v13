@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_res_partner_form_inherit_pcp_stock" model="ir.ui.view">
+        <field name="name">view.res.partner.form.inherit.pcp.stock</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']/.." position="after">
+                <div class="o_row">
+                    <label for="short_code" string="Short Code:"/>
+                    <field name="short_code"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

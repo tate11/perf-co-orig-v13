@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--Product template tree view-->
+    <record id="product_template_tree_view_inherited_pcp" model="ir.ui.view">
+        <field name="name">product.template.tree.view.inherited.pcp</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="limit">250</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Lot tree view-->
+    <record id="view_production_lot_tree_inherited_pcp" model="ir.ui.view">
+        <field name="name">stock.production.lot.tree.inherited.pcp</field>
+        <field name="model">stock.production.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="limit">250</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--LP tree view-->
+    <record id="license_plate_tree_inherited_pcp" model="ir.ui.view">
+        <field name="name">license.plate.tree.inherited.pcp</field>
+        <field name="model">license.plate</field>
+        <field name="inherit_id" ref="pcp_stock.license_plate_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="limit">250</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Sales order tree view-->
+    <record id="view_order_tree_inherited_pcp" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherited.pcp</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="limit">250</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Sales Quotation tree view-->
+    <record id="view_quotation_tree_with_onboarding" model="ir.ui.view">
+        <field name="name">sale.quotation.tree.inherited.pcp</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="limit">250</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Purchase order tree view-->
+    <record id="purchase_order_view_tree_inherited_pcp" model="ir.ui.view">
+        <field name="name">purchase.order.view.tree.inherited.pcp</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="limit">250</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Purchase quotation tree view-->
+    <record id="purchase_order_tree_inherited_pcp" model="ir.ui.view">
+        <field name="name">purchase.order.tree.inherited.pcp</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="limit">250</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--Invoice/Bill tree view-->
+    <record id="view_invoice_tree_inherited_pcp" model="ir.ui.view">
+        <field name="name">account.invoice.tree.inherited.pcp</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="limit">250</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="product_uom_form_view" model="ir.ui.view">
+        <field name="name">uom.uom.form</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="uom.product_uom_form_view"/>
+        <field name="arch" type="xml">
+            <field name="rounding" position="after">
+                <field name="measure_type" invisible="1"/>
+                <field name="print_multiple_barcodes" attrs="{'invisible': [('measure_type', '!=', 'unit')]}"/>
+            </field>
+        </field>
+    </record>
+</odoo>

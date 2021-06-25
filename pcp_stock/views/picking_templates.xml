@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="label_transfer_template_view_pdf" inherit_id="stock.label_transfer_template_view_pdf">
+        <xpath expr="//t[@t-foreach='range(qty)']" position="before">
+            <t t-if="move_line.product_uom_id.print_multiple_barcodes">
+                <t t-if="move_line.product_uom_id.category_id.measure_type == 'unit' and int(move_line.qty_done) > 0">
+                    <t t-set="qty" t-value="int(move_line.qty_done)"/>
+                </t>
+                <t t-else="">
+                    <t t-set="qty" t-value="1"/>
+                </t>
+            </t>
+            <t t-else="">
+                <t t-set="qty" t-value="1"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="pcp_label_transfer_template_view_zpl" inherit_id="stock.label_transfer_template_view_zpl">
+        <xpath expr="//t[@t-foreach='range(qty)']" position="before">
+            <t t-if="move_line.product_uom_id.print_multiple_barcodes">
+                <t t-if="move_line.product_uom_id.category_id.measure_type == 'unit' and int(move_line.qty_done) > 0">
+                    <t t-set="qty" t-value="int(move_line.qty_done)"/>
+                </t>
+                <t t-else="">
+                    <t t-set="qty" t-value="1"/>
+                </t>
+            </t>
+            <t t-else="">
+                <t t-set="qty" t-value="1"/>
+            </t>
+        </xpath>
+    </template>
+</odoo>

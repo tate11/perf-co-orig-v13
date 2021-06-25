@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="pcp_view_picking_form" model="ir.ui.view">
+        <field name="name">pcp.view.picking.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <field name="origin" position="after">
+                <field name="source_sale_id" invisible="1"/>
+                <field name="customer_materials" attrs="{'invisible': [('source_sale_id', '=', False)]}"/>
+            </field>
+            <field name="move_line_ids_without_package" position="before">
+                <field name="use_create_lots" invisible="1"/>
+                <button name="button_auto_create_lot_name" type="object" string="Auto Create Lot Name" class="btn btn-primary" attrs="{'invisible': ['|', ('use_create_lots', '=', False), ('move_line_ids_without_package', '=', [])]}"/>
+            </field>
+            <field name="move_line_nosuggest_ids" position="before">
+                <button name="button_auto_create_lot_name" type="object" string="Auto Create Lot Name" class="btn btn-primary" attrs="{'invisible': ['|', ('use_create_lots', '=', False), ('move_line_nosuggest_ids', '=', [])]}"/>
+            </field>
+            <field name="owner_id" position="attributes">
+                <attribute name="attrs">{'invisible': 1}</attribute>
+            </field>
+            <field name="owner_id" position="after">
+                <field name="technical_owner_id" groups="stock.group_tracking_owner" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')], 'required': [('picking_type_code', '=', 'incoming')]}" force_save="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="vpicktree_inherit_pcp_stock" model="ir.ui.view">
+        <field name="name">stock.picking.tree</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+          <xpath expr="//field[@name='name']" position="after">
+            <field name="picking_type_code"/>
+          </xpath>
+        </field>
+    </record>
+
+</odoo>

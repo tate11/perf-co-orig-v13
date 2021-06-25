@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!--UoM tree-->
+    <record id="pcp_security_product_uom_tree_view" model="ir.ui.view">
+        <field name="name">pcp.security.uom.uom.tree</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="uom.product_uom_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="create">0</attribute>
+                <attribute name="edit">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="pcp_security_product_uom_tree_view_manager" model="ir.ui.view">
+        <field name="name">pcp.security.uom.uom.tree.manager</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="pcp_security_product_uom_tree_view"/>
+        <field name="groups_id" eval="[(6, 0, [ref('pcp_security.manage_uom_group')])]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="create">1</attribute>
+                <attribute name="edit">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--UoM form-->
+    <record id="pcp_security_product_uom_form_view" model="ir.ui.view">
+        <field name="name">pcp.security.uom.uom.form</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="uom.product_uom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="create">0</attribute>
+                <attribute name="edit">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="pcp_security_product_uom_form_view_manager" model="ir.ui.view">
+        <field name="name">pcp.security.uom.uom.form.manager</field>
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="pcp_security_product_uom_form_view"/>
+        <field name="groups_id" eval="[(6, 0, [ref('pcp_security.manage_uom_group')])]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="create">1</attribute>
+                <attribute name="edit">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--UoM Categories tree-->
+    <record id="pcp_security_product_uom_categ_tree_view" model="ir.ui.view">
+        <field name="name">pcp.security.uom.categ.tree</field>
+        <field name="model">uom.category</field>
+        <field name="inherit_id" ref="uom.product_uom_categ_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="create">0</attribute>
+                <attribute name="edit">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="pcp_security_product_uom_categ_tree_view_manager" model="ir.ui.view">
+        <field name="name">pcp.security.uom.categ.tree.manager</field>
+        <field name="model">uom.category</field>
+        <field name="inherit_id" ref="pcp_security_product_uom_categ_tree_view"/>
+        <field name="groups_id" eval="[(6, 0, [ref('pcp_security.manage_uom_group')])]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="create">1</attribute>
+                <attribute name="edit">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--UoM Categories form-->
+    <record id="pcp_security_product_uom_categ_form_view" model="ir.ui.view">
+        <field name="name">pcp.security.uom.categ.form</field>
+        <field name="model">uom.category</field>
+        <field name="inherit_id" ref="uom.product_uom_categ_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="create">0</attribute>
+                <attribute name="edit">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="pcp_security_product_uom_categ_form_view_manager" model="ir.ui.view">
+        <field name="name">pcp.security.uom.categ.form.manager</field>
+        <field name="model">uom.category</field>
+        <field name="inherit_id" ref="pcp_security_product_uom_categ_form_view"/>
+        <field name="groups_id" eval="[(6, 0, [ref('pcp_security.manage_uom_group')])]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="create">1</attribute>
+                <attribute name="edit">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

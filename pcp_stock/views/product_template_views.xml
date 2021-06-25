@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="product_template_kanban_view_inherit">
+        <field name="name">product.template.kanban.view.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//strong[hasclass('o_kanban_record_title')]" position="replace">
+                <strong class="o_kanban_record_title">
+                    <strong t-if="record.default_code.value">[<field name="default_code"/>]</strong>
+                    <br/>
+                    <em><field name="name"/></em>
+                </strong>
+            </xpath>
+        </field>
+    </record>
+</odoo>

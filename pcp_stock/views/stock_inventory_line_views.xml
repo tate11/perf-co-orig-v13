@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_stock_inventory_line_tree_inherit_pcp_stock" model="ir.ui.view">
+        <field name="name">stock.inventory.line.tree</field>
+        <field name="model">stock.inventory.line</field>
+        <field name="inherit_id" ref="stock.stock_inventory_line_tree2"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="attributes">
+                <attribute name="attrs">{'column_invisible': True}</attribute>
+            </field>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="technical_owner_id" groups="stock.group_tracking_owner" attrs="{'readonly': ['|', ('is_editable', '=', False), ('state', '!=', 'confirm')], 'required': ('state', '=', 'draft')}" force_save="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_move_line_tree_inherit_pcp_stock" model="ir.ui.view">
+        <field name="name">stock.move.line.tree</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_move_line_tree"/>
+        <field name="arch" type="xml">
+            <field name="reference" position="after">
+                <field name="origin"/>
+            </field>
+            <field name="qty_done" position="after">
+                <field name="product_uom_qty" string="Quantity Reserved"/>
+            </field>
+        </field>
+    </record>
+</odoo>
