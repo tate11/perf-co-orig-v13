@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+                string="Bill of Lading"
+                id="action_bill_of_lading"
+                model="stock.picking"
+                report_type="qweb-html"
+                name="pcp_sales.report_bill_of_ladings"
+                file="pcp_sales.report_bill_of_ladings"
+                print_report_name="'Bill of Lading - %s - %s' % (object.partner_id.name or '', object.name)"
+        />
+
+        <template id="report_bill_of_lading_document">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <t t-foreach="o.get_bill_of_lading_data()" t-as="record">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <style>
+                                div{
+                                    font-size: 14px;
+                                }
+                                p{
+                                    padding-left: 10px;
+                                    margin-bottom: 0px;
+                                }
+                                .dark-cell{
+                                    background-color: #56524F;
+                                }
+                                .table-content{
+                                    border: none;
+                                }
+                                .table-content th, .table-content td {
+                                    border: none;
+
+                                    padding-left: 10px;
+                                    font-weight: normal;
+                                    text-align: left;
+                                    line-height: 1.5;
+                                }
+                                .table-bordered th, .table-bordered td{
+                                    border: 1px solid black;
+                                    border-collapse: collapse;
+                                    text-align: center;
+                                }
+                                .note{
+                                    font-size:9.5px;
+                                    line-height:1;
+                                    margin-top: 10px;
+                                    margin-bottom: 10px;
+                                }
+                            </style>
+
+
+                            <!--########################## TITLE REPORT ##########################-->
+                            <div class="row border border-dark border-bottom-0">
+                                <div class="col-4">
+                                    <p>Date:
+                                        <span style="font-weight: bold;">
+                                            <t t-esc="record['bol_date']"/>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-4" style="text-align: center;">
+                                    <h4 style="font-weight:bold">Straight Bill of Lading</h4>
+                                </div>
+                                <div class="col-4" style="text-align: right;">
+                                    <div>
+                                        <p style="">B/L NO.
+                                            <span style="font-weight: bold;" t-esc="record['bol_number']"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!--########################## SHIPPER AND CUSTOMER INFORMATION ##########################-->
+                            <div class="row dark-cell" style="color: white; text-align: center">
+                                <div class="col-6  border border-right-0 border-dark">
+                                    <span>SHIPPER (ORIGIN)</span>
+                                </div>
+                                <div class="col-6  border border-dark">
+                                    <span>SOLD TO</span>
+                                </div>
+                            </div>
+                            <div class="row border border-top-0 border-dark">
+                                <div class="col-6 border-right border-dark" style="padding: 0px;">
+                                    <div class=" border-bottom border-dark">
+                                        <table class="table-content" style=" width: 100%;">
+                                            <tr>
+                                                <th style=" width: 20%;">Shipper No.</th>
+                                                <th>
+                                                    <span t-esc="record['shipper']['number']"/>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td>Trailer No.</td>
+                                                <td>
+                                                    <span t-esc="record['trailer_number']"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div>
+                                        <table class="table-content" style=" width: 100%;">
+                                            <tr>
+                                                <th style=" width: 20%;">Name:</th>
+                                                <th style="font-style: italic;">
+                                                    <span t-esc="record['shipper']['name']"/>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td>Address:</td>
+                                                <td style="font-style: italic;">
+                                                    <span t-esc="record['shipper']['street']"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td style="font-style: italic;">
+                                                    <span t-esc="record['shipper']['city']"/>,
+                                                    <span t-esc="record['shipper']['state_code']"/>
+                                                    <span t-esc="record['shipper']['zip_code']"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                </div>
+                                <div class="col-6" style="padding: 0px;">
+                                    <div class=" border-bottom border-dark">
+                                        <table class="table-content" style=" width: 100%;">
+                                            <tr>
+                                                <th style=" width: 20%;">Name:</th>
+                                                <th style="font-style: italic;">
+                                                    <span t-esc="record['customer']['name']"/>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td>Address:</td>
+                                                <td style="font-style: italic;">
+                                                    <span t-esc="record['customer']['street']"/>
+                                                </td>
+                                            </tr>
+                                            <t t-if="record['customer']['street2']">
+                                                <tr>
+                                                    <td/>
+                                                    <td style="font-style: italic;">
+                                                        <span t-esc="record['customer']['street2']"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+
+                                            <tr>
+                                                <td/>
+                                                <td style="font-style: italic;">
+                                                    <span t-esc="record['customer']['city']"/>,
+                                                    <span t-esc="record['customer']['state_code']"/>
+                                                    <span t-esc="record['customer']['zip_code']"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div>
+                                        <table class="table-content" style=" width: 100%;">
+                                            <tr>
+                                                <th style="font-weight: bold; width: 20%;">P.O. NO.</th>
+                                                <th style="font-style: italic;">
+                                                    <span t-esc="record['customer_po_number']"/>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: bold;">S.O. NO.</td>
+                                                <td style="font-style: italic;">
+                                                    <span t-esc="record['so_number']"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!--########################## DELIVERY INFORMATION ##########################-->
+                            <div class="row border border-top-0 border-dark">
+                                <div class="col-6 border-right border-dark" style="padding: 0px;">
+                                    <div class="border-bottom border-dark dark-cell"
+                                         style="color: white; text-align: center">
+                                        <span>DELIVERY ADDRESS</span>
+                                    </div>
+                                    <div>
+                                        <table class="table-content" style=" width: 100%;">
+                                            <tr>
+                                                <th style=" width: 20%;">Name:</th>
+                                                <th style="font-style: italic;">
+                                                    <span t-esc="record['delivery']['name']"/>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td>Address:</td>
+                                                <td style="font-style: italic;">
+                                                    <span t-esc="record['delivery']['street']"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td style="font-style: italic;">
+                                                    <span t-esc="record['delivery']['city']"/>,
+                                                    <span t-esc="record['delivery']['state_code']"/>
+                                                    <span t-esc="record['delivery']['zip_code']"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-6" style="padding: 0px;">
+                                    <p>
+                                        <span style="font-weight: bold;">SPECIAL INSTRUCTIONS:</span>
+                                        <span style="font-weight: bold; padding-left: 30px">
+                                            <input type="checkbox"
+                                                   t-att-checked="'checked' if record['master_bol'] else None"/>
+                                            Master Bill of Lading
+                                        </span>
+                                        <br/>
+                                        <span t-esc="record['special_instructions']"/>
+                                    </p>
+
+                                </div>
+                            </div>
+
+
+                            <!--########################## PRODUCT LIST ##########################-->
+                            <div class="row ">
+                                <table class="table table-sm table-bordered" style="width: 100%; margin-bottom: 0px;">
+                                    <tr>
+                                        <th style="width: 7%;">Handling Units</th>
+                                        <th style="width: 7%;">HU Type</th>
+                                        <th style="width: 7%;">Packages</th>
+                                        <th style="width: 7%;">PKG Type</th>
+                                        <th style="width: 3%;">HM</th>
+                                        <th style="width: 40%;">Description of Articles, Special Marks and Exceptions
+                                        </th>
+                                        <th style="width: 7%;">NMFC</th>
+                                        <th style="width: 7%;">Class</th>
+                                        <th style="width: 10%;">Weight Subj to Correction</th>
+                                    </tr>
+                                    <t t-foreach="record['products_lst']" t-as="product">
+                                        <tr>
+                                            <td/>
+                                            <td/>
+                                            <td>
+                                                <span t-esc="product['quantity']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="product['uom_name']"/>
+                                            </td>
+                                            <td/>
+                                            <td style="text-align: left;">
+                                                <span t-esc="product['name']"/>
+                                            </td>
+                                            <td/>
+                                            <td/>
+                                            <td style="text-align: right;">
+                                                <span t-esc="product['weight_lbs']"/>
+                                                lbs
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-foreach="record['blank_lines']" t-as="i">
+                                        <tr>
+                                            <td style="color: white;">.</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </t>
+                                    <tr>
+                                        <td>0</td>
+                                        <td style="background-color: #9d8e82;"/>
+                                        <td>
+                                            <span t-esc="record['total_qty']"/>
+                                        </td>
+                                        <td colspan="5" style="font-weight: bold;">Total for All Pages (Weight in lbs)
+                                        </td>
+                                        <td style="text-align: right;">
+                                            <span t-esc="record['total_weight']"/>
+                                            lbs
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+
+                            <!--########################## PACKAGE INFORMATION ##########################-->
+                            <div class="row border border-top-0 border-bottom-0 border-dark">
+                                <div class="col-4" style="padding: 0px;">
+                                    <table class="table-content" style="width: 100%;">
+                                        <tr>
+                                            <th style="font-weight: bold; width: 40%;">Carrier:</th>
+                                            <th>
+                                                <span t-esc="record['carrier']"/>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Vessel No:</td>
+                                            <td>
+                                                <span t-esc="record['vessel_no']"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; border-top: none !important;">Booking No:</td>
+                                            <td style="border-top: none !important;">
+                                                <span t-esc="record['booking_no']"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-4 border-right border-dark" style="padding: 0px;">
+                                    <table class="table-content" style="width: 100%;">
+                                        <tr>
+                                            <th style="font-weight: bold; width: 40%;">Container No:</th>
+                                            <th>
+                                                <span t-esc="record['container_no']"/>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold; border-top: none !important;">Seal No:</td>
+                                            <td style="border-top: none !important;">
+                                                <span t-esc="record['seal_no']"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-2 border-right border-dark" style="font-weight: bold; padding: 0px;">
+                                    <p>Freight Terms:
+                                        <br/>
+                                        <span>
+                                            <input type="checkbox"
+                                                   t-att-checked="'checked' if record['freight_terms'] == 'prepaid' else None"/>
+                                            Prepaid
+                                        </span>
+                                        <br/>
+                                        <span>
+                                            <input type="checkbox"
+                                                   t-att-checked="'checked' if record['freight_terms'] == 'collect' else None"/>
+                                            Collect
+                                        </span>
+                                        <br/>
+                                        <span>
+                                            <input type="checkbox"
+                                                   t-att-checked="'checked' if record['freight_terms'] == 'third_party' else None"/>
+                                            Third Party
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-2" style="padding: 0px;">
+                                    <table class="table-content" style="width: 100%; margin-bottom: 0px;">
+                                        <tr>
+                                            <th style="color: white">.</th>
+                                            <th></th>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Gross WT:</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr >
+                                            <td style="font-weight: bold; border-top: none !important;">Tare WT:</td>
+                                            <td style="border-top: none !important;">0</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                            <!--########################## Other INFORMATION ##########################-->
+                            <div class="row border border-bottom-0 border-dark">
+                                <div class="col-6 border-right border-dark" style="padding-left: 0px">
+                                    <p class="note">
+                                        <span>DECLARED VALUE: Where the rate is dependent on value, shippers are
+                                            required to state specifically in writing the agreed or declared value of
+                                            the property as follows:
+                                        </span>
+                                        <br/>
+                                        <span>The agreed or declared value of the property is specifically stated by the
+                                            shipper to be not
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                        <span>exceeding __________________ per __________________.</span>
+                                    </p>
+                                </div>
+                                <div class="col-6" style="padding-left: 0px">
+                                    <p class="note">
+                                        <span>The carrier shall not make delivery of this shipment without payment of
+                                            freight and all other lawful charges.
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                        <span>_______________________________________ Shipper Signature</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row border border-bottom-0 border-dark" style="padding-left: 0px">
+                                <p style="font-weight: bold;">NOTE Liability Limitation for loss or damage in this
+                                    shipment may be applicable. See 49 U.S.C. - 14706(c)(1)(A) and (B).
+                                </p>
+                            </div>
+                            <div class="row border border-bottom-0 border-dark" style="padding-left: 0px">
+                                <p class="note">
+                                    RECEIVED, subject to individually determined rates or contracts that have been
+                                    agreed upon in writing between the carrier ond shipper,
+                                    If applicable, otherwise to the rates, classifications and rules that have been
+                                    established by the carrier and are available to the shipper on request.
+                                    The property described above, in apparent good order, except as noted (contents and
+                                    condition of contents of packages uniknown), marked, consigned,
+                                    and destined as shown above, which sald carrier agrees to carry to destination, If
+                                    on its route, or other wise deliver to another carrier on the route to destination.
+                                    Every service to be performed hereunder shall be subject to all bill of lading
+                                    terrms and conditions in the governing classification on the date of the shipment.
+                                    Shipper hereby certifies that he is hereby farmillar with all the bill of lading
+                                    terms and conditions in the governing classification and the said terms and
+                                    conditions
+                                    are hereby agreed to by the shipper and accepted for himseif end his assigns.
+                                </p>
+                            </div>
+                            <div class="row border border-bottom-0 border-dark" style="padding-left: 0px">
+                                <p class="note">
+                                    This is to certify that the above named materials are properly classified,
+                                    described, packaged, marked and labeled, and are in proper condition for
+                                    transportation according to the appicable reguiations of the Department of
+                                    Transportation.
+                                </p>
+                            </div>
+
+
+                            <!--########################## SIGNATURE ##########################-->
+                            <div class="row border border-dark">
+                                <div class="col-4 border-right border-dark" style="padding: 0px">
+                                    <div class="border-bottom border-dark">
+                                        <p>
+                                            <span style="font-weight: bold;">SHIPPER COMPANY NAME</span>
+                                            <br/>
+                                            <span style="padding-left: 2px;" t-esc="record['shipper']['company_name']"/>
+                                        </p>
+                                    </div>
+                                    <div style="padding-left: 0px">
+                                        <p>
+                                            <span style="font-weight: bold;">SHIPPER SIGNATURE/ DATE</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 border-right border-dark" style="padding: 0px">
+                                    <div class="border-bottom border-dark" >
+                                        <p>
+                                            <span style="font-weight: bold;">CARRIER</span>
+                                            <br/>
+                                            <t t-if="record['carrier']">
+                                                <span style="padding-left: 2px;" t-esc="record['carrier']"/>
+                                            </t>
+                                            <t t-else="">
+                                                <span style="color: white;">.</span>
+                                            </t>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p>
+                                            <span style="font-weight: bold;">DRIVER</span>
+
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-2" style="padding-left: 0px">
+                                    <p>Trailer Loaded
+                                        <br/>
+                                        <span>
+                                            <input type="checkbox"
+                                                   t-att-checked="'checked' if record['trailer_loaded'] == 'shipper' else None"/>
+                                            By Shipper
+                                        </span>
+                                        <br/>
+                                        <span>
+                                            <input type="checkbox"
+                                                   t-att-checked="'checked' if record['trailer_loaded'] == 'driver' else None"/>
+                                            By Driver
+                                        </span>
+                                        <br/>
+                                    </p>
+                                </div>
+                                <div class="col-2" style="padding-left: 0px">
+                                    <p>Freight Counted
+                                        <br/>
+                                        <span>
+                                            <input type="checkbox"
+                                                   t-att-checked="'checked' if record['freight_counted'] == 'shipper' else None"/>
+                                            By Shipper
+                                        </span>
+                                        <br/>
+                                        <span>
+                                            <input type="checkbox"
+                                                   t-att-checked="'checked' if record['freight_counted'] == 'driver_pallet' else None"/>
+                                            By Driver / pallets said to contain
+                                        </span>
+                                        <br/>
+                                        <span>
+                                            <input type="checkbox"
+                                                   t-att-checked="'checked' if record['freight_counted'] == 'driver_pieces' else None"/>
+                                            By Driver/Pieces
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_bill_of_ladings">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="pcp_sales.report_bill_of_lading_document" t-lang="o.partner_id.lang"/>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_delivery_document_inherit_pcp_sales" inherit_id="stock.report_delivery_document">
+        <xpath expr="//div[@name='div_origin']" position="before">
+            <div t-if="o.sale_id" class="col-auto" name="div_po_number">
+                <strong>Customer P.O:</strong>
+                <p t-esc="o.po_number"/>
+            </div>
+            <div t-if="o.sale_id" class="col-auto" name="div_ship_via">
+                <strong>Ship VIA:</strong>
+                <p t-esc="o.ship_via"/>
+            </div>
+            <div t-if="o.sale_id" class="col-auto" name="div_fob">
+                <strong>F.O.B:</strong>
+                <p t-esc="o.free_on_board"/>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="report_picking_inherit_pcp_sales" inherit_id="stock.report_picking">
+        <xpath expr="//div[@name='div_origin']" position="before">
+            <div t-if="o.sale_id" class="col-auto" name="div_po_number">
+                <strong>Customer P.O:</strong>
+                <p t-esc="o.po_number"/>
+            </div>
+            <div t-if="o.sale_id" class="col-auto" name="div_ship_via">
+                <strong>Ship VIA:</strong>
+                <p t-esc="o.ship_via"/>
+            </div>
+            <div t-if="o.sale_id" class="col-auto" name="div_fob">
+                <strong>F.O.B:</strong>
+                <p t-esc="o.free_on_board"/>
+            </div>
+        </xpath>
+    </template>
+</odoo>

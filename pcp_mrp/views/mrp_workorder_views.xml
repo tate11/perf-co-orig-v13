@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="mrp_workorder_view_form_tablet_inherit_pcp" model="ir.ui.view">
+        <field name="name">mrp.workorder.view.form.tablet.inherit.pcp</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp_workorder.mrp_workorder_view_form_tablet"/>
+        <field name="arch" type="xml">
+            <button name="action_open_manufacturing_order" position="attributes">
+                <attribute name="attrs">{'invisible': 1}</attribute>
+            </button>
+            <xpath expr="//div[hasclass('workorder_bar')]/div[hasclass('workorder_bar_right')]" position="attributes">
+                <attribute name="style">font-size: 25px; font-weight: bold;</attribute>
+            </xpath>
+            <xpath expr="//field[@name='finished_lot_id']" position="before">
+                <field name="workcenter_code" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='finished_lot_id']" position="attributes">
+                <attribute name="context">{
+                    'default_product_id': product_id,
+                    'default_company_id': company_id,
+                    'create_finished_product_lot': True,}
+                </attribute>
+            </xpath>
+            <xpath expr="//div[hasclass('workorder_bar')]" position="after">
+                <div class="workorder_bar">
+                    <div class="workorder_bar_left o_workorder_bar_content">
+                        <table style="border: none; width: 100%; font-weight: normal;">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%"><strong>Unit UPC:</strong></th>
+                                    <th style="font-weight: normal;"><field name="unit_upc_code"/></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Case UPC:</strong></td>
+                                    <td><field name="case_upc_code"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Best By:</strong></td>
+                                    <td><field name="best_by_date"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Case Lot:</strong></td>
+                                    <td><field name="case_lot"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Case Count:</strong></td>
+                                    <td><field name="unit_count_per_case"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="workorder_bar_right o_workorder_bar_content">
+                        <table style="border: none; width: 100%; font-weight: normal;">
+                            <thead>
+                                <tr>
+                                    <td style="width: 30%"><strong>TI/HI:</strong></td>
+                                    <th style="font-weight: normal;">
+                                        <field name="ti_pallet_size"/>
+                                        <span> x </span>
+                                        <field name="hi_pallet_size"/>
+                                        <span> = </span>
+                                        <field name="case_count_per_pallet"/>
+                                        <span> (Per Pallet Case Count)</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Total Pallets:</strong></td>
+                                    <td><field name="total_pallets"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Unit Weight:</strong></td>
+                                    <td><field name="weight_ounce"/> oz</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Grams:</strong></td>
+                                    <td><field name="weight_gram"/> gram</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_mrp_workorder_form_inherit_pcp_mrp" model="ir.ui.view">
+        <field name="name">view.mrp.workorder.form.inherit.pcp.mrp</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_planned_start']" position="before">
+                <field name="is_change_date" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='date_planned_start']" position="attributes">
+                <attribute name="attrs">{
+                    'readonly': [
+                        '|',
+                            ('state', 'in', ('done', 'cancel')),
+                            ('is_change_date', '=', False),
+                    ]
+                }</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_planned_finished']" position="attributes">
+                <attribute name="attrs">{
+                    'readonly': [
+                        '|',
+                            ('state', 'in', ('done', 'cancel')),
+                            ('is_change_date', '=', False),
+                    ]
+                }</attribute>
+            </xpath>
+            <xpath expr="//group[1]" position="after">
+                <group name="additional_info">
+                    <group>
+                        <field name="unit_upc_code" placeholder="e.g. 1-23456-78999-9"/>
+                        <field name="case_upc_code"/>
+                        <field name="best_by_date"/>
+                        <field name="case_lot"/>
+                        <field name="unit_count_per_case"/>
+                    </group>
+                    <group>
+                        <label for="ti_pallet_size" string="TI/HI"/>
+                        <div class="o_row">
+                            <field name="ti_pallet_size" nolabel="1"/>
+                            <span> x</span>
+                            <field name="hi_pallet_size" nolabel="1"/>
+                            <span> =</span>
+                            <field name="case_count_per_pallet" nolabel="1"/>(Per Pallet Case Count)
+                        </div>
+                        <field name="total_pallets"/>
+                        <label for="weight_ounce"/>
+                        <div class="o_row">
+                            <field name="weight_ounce" nolabel="1"/>
+                            <span>oz</span>
+                        </div>
+                        <label for="weight_gram"/>
+                        <div class="o_row">
+                            <field name="weight_gram" nolabel="1"/>
+                            <span>gram</span>
+                        </div>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

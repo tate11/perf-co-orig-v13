@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_product_template_form_inherit_pcp_mrp" model="ir.ui.view">
+        <field name="name">view.product.template.form.inherit.pcp.mrp</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']/group[1]" position="after">
+                <group string="Additional Information" name="additional_info">
+                    <group>
+                        <field name="unit_upc_code" placeholder="e.g. 1-23456-78999-9"/>
+                        <field name="case_upc_code"/>
+                        <field name="best_by_date"/>
+                        <field name="case_lot"/>
+                        <field name="unit_count_per_case"/>
+                    </group>
+                    <group>
+                        <label for="ti_pallet_size" string="TI/HI"/>
+                        <div class="o_row">
+                            <field name="ti_pallet_size" nolabel="1"/>
+                            <span> x</span>
+                            <field name="hi_pallet_size" nolabel="1"/>
+                            <span> =</span>
+                            <field name="case_count_per_pallet" nolabel="1"/>(Per Pallet Case Count)
+                        </div>
+                        <label for="weight_ounce"/>
+                        <div class="o_row">
+                            <field name="weight_ounce" nolabel="1"/>
+                            <span>oz</span>
+                        </div>
+                        <label for="weight_gram"/>
+                        <div class="o_row">
+                            <field name="weight_gram" nolabel="1"/>
+                            <span>gram</span>
+                        </div>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

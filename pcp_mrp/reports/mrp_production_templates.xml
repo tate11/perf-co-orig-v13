@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="pcp_label_production_view" inherit_id="mrp.label_production_view">
+        <xpath expr="//t[@t-foreach='range(qty)']" position="before">
+            <t t-if="move_line.product_uom_id.print_multiple_barcodes">
+                <t t-if="move_line.product_uom_id.category_id.measure_type == 'unit' and int(move_line.qty_done) > 0">
+                    <t t-set="qty" t-value="int(move_line.qty_done)"/>
+                </t>
+                <t t-else="">
+                    <t t-set="qty" t-value="1"/>
+                </t>
+            </t>
+            <t t-else="">
+                <t t-set="qty" t-value="1"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="pcp_label_production_view_pdf" inherit_id="mrp.label_production_view_pdf">
+        <xpath expr="//t[@t-foreach='range(qty)']" position="before">
+            <t t-if="move_line.product_uom_id.print_multiple_barcodes">
+                <t t-if="move_line.product_uom_id.category_id.measure_type == 'unit' and int(move_line.qty_done) > 0">
+                    <t t-set="qty" t-value="int(move_line.qty_done)"/>
+                </t>
+                <t t-else="">
+                    <t t-set="qty" t-value="1"/>
+                </t>
+            </t>
+            <t t-else="">
+                <t t-set="qty" t-value="1"/>
+            </t>
+        </xpath>
+    </template>
+    <template id="report_mrporder_inherit_pcp_mrp" inherit_id="mrp.report_mrporder">
+        <xpath expr="//div[@t-if='o.workorder_ids']" position="before">
+            <div class="row mt32 mb32">
+                <div class="col-3">
+                    <strong>Unit UPC:</strong><br/>
+                    <span t-field="o.unit_upc_code"/>
+                </div>
+                <div class="col-3">
+                    <strong>Case UPC:</strong><br/>
+                    <span t-field="o.case_upc_code"/>
+                </div>
+                <div class="col-2">
+                    <strong>Best By:</strong><br/>
+                    <span t-field="o.best_by_date"/>
+                </div>
+                <div class="col-2">
+                    <strong>Case Lot:</strong><br/>
+                    <span t-field="o.case_lot"/>
+                </div>
+                <div class="col-2">
+                    <strong>Case Count:</strong><br/>
+                    <span t-field="o.unit_count_per_case"/>
+                </div>
+            </div>
+            <div class="row mt32 mb32">
+                <div class="col-3">
+                    <strong>TI/HI:</strong><br/>
+                    <span t-field="o.ti_pallet_size"/>
+                    <span>x</span>
+                    <span t-field="o.hi_pallet_size"/>
+                </div>
+                <div class="col-3">
+                    <strong>Per Pallet Case Count:</strong><br/>
+                    <span t-field="o.case_count_per_pallet"/>
+                </div>
+                <div class="col-2">
+                    <strong>Total Pallets:</strong><br/>
+                    <span t-field="o.total_pallets"/>
+                </div>
+                <div class="col-2">
+                    <strong>Unit Weight:</strong><br/>
+                    <span t-field="o.weight_ounce"/>
+                    <span> oz</span>
+                </div>
+                <div class="col-2">
+                    <strong>Grams:</strong><br/>
+                    <span t-field="o.weight_gram"/>
+                    <span> gram</span>
+                </div>
+
+            </div>
+        </xpath>
+    </template>
+</odoo>

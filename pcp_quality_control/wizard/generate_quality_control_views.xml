@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="pcp_generate_quality_point_view_form" model="ir.ui.view">
+        <field name="name">generate.quality.control.form</field>
+        <field name="model">generate.quality.control</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="company_id" invisible="1" />
+                        <field name="operation_id" invisible="1" />
+                        <field name="code" invisible="1" />
+                        <group>
+                            <field name="title" />
+                            <field name="product_categ_id"/>
+                            <field name="picking_type_id" string="Operation"/>
+                        </group>
+                        <group>
+                            <field name="measure_frequency_type" string="Control Type"/>
+                            <label for="measure_frequency_value" string="Control Frequency" attrs="{'invisible': [('measure_frequency_type', '=', 'all')]}"/>
+                            <div class="o_row" attrs="{'invisible': [('measure_frequency_type', '=', 'all')]}">
+                                <span attrs="{'invisible': [('measure_frequency_type', '=', 'all')]}">Every </span>
+                                <field name="measure_frequency_value" nolabel="1" attrs="{'invisible': [('measure_frequency_type', '!=', 'random')]}"/>
+                                <label for="measure_frequency_value" string="% of the operation" attrs="{'invisible': [('measure_frequency_type', '!=', 'random')]}"/>
+                                <field name="measure_frequency_unit_value" string="Frequency" nolabel="1" attrs="{'invisible': [('measure_frequency_type', '!=', 'periodical')]}"/>
+                                <field name="measure_frequency_unit" attrs="{'invisible': [('measure_frequency_type', '!=', 'periodical')]}"/>
+                            </div>
+                            <field name="test_type" invisible="1" />
+                            <field name="test_type_id" string="Type" widget="selection"/>
+                            <label for="norm" attrs="{'invisible': [('test_type', '!=', 'measure')]}"/>
+                            <div class="o_row" attrs="{'invisible': [('test_type', '!=', 'measure')]}">
+                                <field name="norm" attrs="{'required': [('test_type', '=', 'measure')]}"/>
+                                <field name="norm_unit" string="Unit of Measure" attrs="{'required': [('test_type', '=', 'measure')]}"/>
+                            </div>
+                            <label for="tolerance_min" string="Tolerance" attrs="{'invisible': [('test_type', '!=', 'measure')]}"/>
+                            <div attrs="{'invisible': [('test_type', '!=', 'measure')]}" class="o_row">
+                                <span>from </span> <field name="tolerance_min"/>
+                                <span>to </span> <field name="tolerance_max"/>
+                            </div>
+                            <field name="team_id" widget="selection"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Instructions" name="instructions">
+                            <field name="note" placeholder="Describe the quality check to do..."/>
+                        </page>
+                        <page string="Message If Failure" attrs="{'invisible': [('test_type', 'in', ['picture', 'text', 'register_consumed_materials', 'print_label'])]}">
+                            <field name="failure_message"/>
+                        </page>
+                        <page string="Notes" name="Notes">
+                            <field name="reason" string="Note" placeholder="Describe why you need to perform this quality check..."/>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button class="btn-primary" type="object" name="generate_control_points" string="Generate" />
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="pcp_generate_quality_control" model="ir.actions.act_window">
+        <field name="name">Generate Quality Controls</field>
+        <field name="res_model">generate.quality.control</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face" />
+            <p>
+                Generate Quality Control Points
+            </p>
+      </field>
+    </record>
+
+    <menuitem
+        id="menu_generate_quality_control"
+        name="Generate Quality Control Points"
+        action="pcp_generate_quality_control"
+        parent="quality_control.menu_quality_root"
+        sequence="16"/>
+
+</odoo>

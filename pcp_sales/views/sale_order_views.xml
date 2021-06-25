@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_sale_order_form_inherit_pcp_sales" model="ir.ui.view">
+        <field name="name">view.sale.order.form.inherit.pcp.sales</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='sale_shipping']" position="inside">
+                <field name="po_number"/>
+                <field name="ship_via"/>
+                <field name="free_on_board"/>
+            </xpath>
+            <xpath expr="//page[@name='other_information']" position="inside">
+                <group>
+                    <group string="Bill of Lading" name="bol_info" >
+                        <field name="trailer_number"/>
+                        <field name="special_instructions"/>
+                        <field name="master_bol"/>
+                        <field name="carrier"/>
+                        <field name="vessel_no"/>
+                        <field name="booking_no"/>
+                        <field name="container_no"/>
+                        <field name="seal_no"/>
+                        <field name="freight_terms"/>
+                        <field name="trailer_loaded"/>
+                        <field name="freight_counted"/>
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='route_id']" position="attributes">
+                <attribute name="optional">show</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sale_order_form_inherit_edit_type" model="ir.ui.view">
+        <field name="name">view.sale.order.form.inherit.edit.type</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_order_type.sot_view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type_id']" position="before">
+                <field name="is_required_type" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='type_id']" position="attributes">
+                <attribute name="required">0</attribute>
+                <attribute name="attrs">{
+                    "readonly": [("state", "in", ("sale", "done", "cancel"))],
+                    "required": [('is_required_type', '=', True)]}
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sale_order_tree_inherit_pcp_sales" model="ir.ui.view">
+        <field name="name">view.sale.order.tree.inherit.pcp.sales</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="po_number" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_quotation_tree_inherit_pcp_sales" model="ir.ui.view">
+        <field name="name">view.quotation.tree.inherit.pcp.sales</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="po_number" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_sale_order_search_inherit_pcp_sales" model="ir.ui.view">
+        <field name="name">view.sale.order.search.inherit.pcp.sales</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="po_number" />
+            </field>
+        </field>
+    </record>
+</odoo>

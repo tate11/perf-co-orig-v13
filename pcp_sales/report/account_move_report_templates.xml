@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_invoice_document_inherit_pcp_sales" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[@id='informations']/div[1]" position="before">
+            <div t-if="o.sale_id" class="col-auto mw-100 mb-2" name="div_po_number">
+                <strong>Customer P.O:</strong>
+                <p t-esc="o.po_number"/>
+            </div>
+            <div t-if="o.sale_id" class="col-auto mw-100 mb-2" name="div_ship_via">
+                <strong>Ship VIA:</strong>
+                <p t-esc="o.ship_via"/>
+            </div>
+            <div t-if="o.sale_id" class="col-auto mw-100 mb-2" name="div_fob">
+                <strong>F.O.B:</strong>
+                <p t-esc="o.free_on_board"/>
+            </div>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="pcp_mrp_picking_form_inherit" model="ir.ui.view">
+        <field name="name">pcp.mrp.picking.form.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <field name="has_subcontracted_product" invisible="1"/>
+                <button
+                    name="button_show_subcontracting_cost_analysis"
+                    type="object"
+                    string="Cost Analysis"
+                    class="oe_stat_button"
+                    icon="fa-dollar"
+                    groups="account.group_account_user"
+                    attrs="{'invisible': ['|', ('state', '!=', 'done'), ('has_subcontracted_product', '=', False)]}"
+                />
+                <button
+                    name="action_view_subcontracting_manufacturing_order"
+                    type="object"
+                    string="Consumed Materials"
+                    class="oe_stat_button"
+                    icon="fa-wrench"
+                    attrs="{'invisible': ['|', ('state', '!=', 'done'), ('has_subcontracted_product', '=', False)]}"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

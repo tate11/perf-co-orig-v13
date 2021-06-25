@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="pcp_mrp_production_form" model="ir.ui.view">
+        <field name="name">pcp.mrp.production.form</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <field name="source_sale_id" invisible="1"/>
+                <button name="action_view_so" type="object" icon="fa-shopping-cart" string="Sales Order"
+                        attrs="{'invisible': [('source_sale_id', '=', False)]}"/>
+            </div>
+            <field name="routing_id" position="after">
+                <field name="reservation_state" attrs="{'invisible': [('state', 'in', ['draft', 'done', 'cancel'])] }"/>
+                <field name="unit_upc_code" placeholder="e.g. 1-23456-78999-9" readonly="1" force_save="1"/>
+                <field name="case_upc_code" readonly="1" force_save="1"/>
+                <field name="best_by_date"/>
+                <field name="case_lot"/>
+                <field name="unit_count_per_case" readonly="1" force_save="1"/>
+            </field>
+            <field name="production_location_id" position="after">
+                <label for="ti_pallet_size" string="TI/HI"/>
+                <div class="o_row">
+                    <field name="ti_pallet_size" nolabel="1" readonly="1" force_save="1"/>
+                    <span> x</span>
+                    <field name="hi_pallet_size" nolabel="1" readonly="1" force_save="1"/>
+                    <span> =</span>
+                    <field name="case_count_per_pallet" nolabel="1"/>(Per Pallet Case Count)
+                </div>
+                <field name="total_pallets"/>
+                <label for="weight_ounce"/>
+                <div class="o_row">
+                    <field name="weight_ounce" nolabel="1" readonly="1" force_save="1"/>
+                    <span>oz</span>
+                </div>
+                <label for="weight_gram"/>
+                <div class="o_row">
+                    <field name="weight_gram" nolabel="1"/>
+                    <span>gram</span>
+                </div>
+            </field>
+            <field name="move_raw_ids" position="before">
+                <field name="is_historical_data" invisible="1"/>
+            </field>
+            <field name="move_raw_ids" position="attributes">
+                <attribute name="attrs">{'readonly': ['&amp;', ('state', '!=', 'draft'), ('is_locked', '=', True)], 'invisible': [('is_historical_data', '=', True)]}</attribute>
+            </field>
+            <field name="move_raw_ids" position="after">
+                <field name="sage_move_raw_ids" context="{'tree_view_ref': 'pcp_mrp.view_stage_stock_move_raw_tree'}" attrs="{'readonly': True, 'invisible': [('is_historical_data', '=', False)]}"/>
+            </field>
+            <xpath expr="//field[@name='date_deadline']" position="before">
+                <field name="is_change_date" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='date_deadline']" position="attributes">
+                <attribute name="attrs">{
+                    'readonly': [
+                        '|',
+                            ('state', 'in', ('done', 'cancel')),
+                            ('is_change_date', '=', False),
+                    ]
+                }</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_start_wo']" position="attributes">
+                <attribute name="attrs">{
+                    'invisible': [ '|', '&amp;', ('routing_id', '!=', False), ('state', 'not in', ['draft', 'confirmed']), ('routing_id', '=', False),],
+                    'readonly': [
+                        '|',
+                            ('is_change_date', '=', False),
+                            '&amp;',
+                                ('routing_id', '!=', False),
+                                ('state', 'not in', ['draft', 'confirmed']),
+                    ]
+                }</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_subcontracting_mrp_production_form_pcp" model="ir.ui.view">
+        <field name="name">view.subcontracting.mrp.production.form.pcp</field>
+        <field name="model">mrp.production</field>
+        <field name="arch" type="xml">
+            <form string="Manufacturing Orders">
+                <header>
+                    <field name="is_locked" invisible="1"/>
+                    <field name="location_src_id" invisible="1"/>
+                    <field name="picking_type_id" invisible="1"/>
+                    <field name="production_location_id" invisible="1"/>
+                    <field name="show_final_lots" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <button
+                        name="action_toggle_is_locked"
+                        attrs="{'invisible': ['|', '|', ('state', 'in', ('cancel', 'draft')), ('id', '=', False), ('is_locked', '=', False)]}"
+                        string="Unlock"
+                        groups="mrp.group_mrp_manager"
+                        type="object"
+                        help="Unlock the manufacturing order to correct what has been consumed or produced."/>
+                    <button
+                        name="action_toggle_is_locked"
+                        attrs="{'invisible': [('is_locked', '=', True)]}"
+                        string="Lock"
+                        class="oe_highlight"
+                        groups="mrp.group_mrp_manager"
+                        type="object"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field
+                            name="move_raw_ids"
+                            context="{
+                                'final_lots': show_final_lots,
+                                'tree_view_ref': 'mrp.view_stock_move_raw_tree',
+                                'form_view_ref': 'mrp.view_stock_move_lots',
+                                'default_location_id': location_src_id,
+                                'default_location_dest_id': production_location_id,
+                                'default_state': 'draft',
+                                'default_raw_material_production_id': id,
+                                'default_picking_type_id': picking_type_id}"
+                            nolabel="1"
+                            attrs="{'readonly': ['&amp;', ('state', '!=', 'draft'), ('is_locked', '=', True)]}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_view_subcontracting_mrp_production" model="ir.actions.act_window">
+        <field name="name">Manufacturing Orders</field>
+        <field name="res_model">mrp.production</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('mrp.mrp_production_tree_view')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('pcp_mrp.view_subcontracting_mrp_production_form_pcp')})]"/>
+    </record>
+</odoo>
+

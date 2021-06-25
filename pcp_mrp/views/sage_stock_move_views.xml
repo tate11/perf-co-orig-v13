@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_sage_stock_move_raw_tree" model="ir.ui.view">
+        <field name="name">sage.stock.move.raw.tree</field>
+        <field name="model">sage.stock.move</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="1" >
+                <field name="product_id" readonly="1"/>
+                <field name="product_uom" groups="uom.group_uom" readonly="1"/>
+                <field name="needs_lots" readonly="1"/>
+                <field name="product_uom_qty" string="To Consume" readonly="1"/>
+                <field name="quantity_done" string="Consumed" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

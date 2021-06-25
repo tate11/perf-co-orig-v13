@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_stock_picking_form_inherit_pcp_sales" model="ir.ui.view">
+        <field name="name">view.stock.picking.form.inherit.pcp.sales</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='other_infos']" position="after">
+                <group string="Extra Information" name="extra_info" attrs="{'invisible': [('sale_id', '=', False)]}">
+                    <field name="sale_id" invisible="1"/>
+                    <field name="po_number" attrs="{'invisible': [('sale_id', '=', False)]}"/>
+                    <field name="ship_via" attrs="{'invisible': [('sale_id', '=', False)]}"/>
+                    <field name="free_on_board" attrs="{'invisible': [('sale_id', '=', False)]}"/>
+                </group>
+                <group string="Bill of Lading" name="bol_info" attrs="{'invisible': [('sale_id', '=', False)]}">
+                    <field name="trailer_number"/>
+                    <field name="special_instructions"/>
+                    <field name="master_bol"/>
+                    <field name="carrier"/>
+                    <field name="vessel_no"/>
+                    <field name="booking_no"/>
+                    <field name="container_no"/>
+                    <field name="seal_no"/>
+                    <field name="freight_terms"/>
+                    <field name="trailer_loaded"/>
+                    <field name="freight_counted"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

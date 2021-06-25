@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_mrp_routing_form_inherit" model="ir.ui.view">
+        <field name="name">view.mrp.routing.form.inherit</field>
+        <field name="model">mrp.routing</field>
+        <field name="inherit_id" ref="mrp.mrp_routing_form_view"/>
+        <field name="arch" type="xml">
+            <field name="operation_ids" position="attributes">
+                <attribute name="context">{'default_routing_id': id, 'default_batch': 'yes', 'default_batch_size': 0.0}</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

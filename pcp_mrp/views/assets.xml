@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="pcp_mrp_assets_backend" name="Backend Assets PCP MRP" inherit_id="web.assets_backend">
+        <xpath expr="script[last()]" position="after">
+            <script type="text/javascript" src="/pcp_mrp/static/src/js/back_action.js"/>
+        </xpath>
+    </template>
+</odoo>

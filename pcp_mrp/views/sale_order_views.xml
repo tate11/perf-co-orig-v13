@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="pcp_mrp_view_order_form" model="ir.ui.view">
+        <field name="name">pcp.mrp.view.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_view_mo" class="oe_stat_button" type="object" icon="fa-wrench" attrs="{'invisible':  [('mo_count', '=', 0)]}">
+                    <field name="mo_count" widget="statinfo" string="Manufacturing Orders" help="Manufacturing Orders"/>
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>
